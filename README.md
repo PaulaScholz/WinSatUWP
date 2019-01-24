@@ -9,6 +9,6 @@ This mixed UWP and Win32 sample shows how to:
 -  Translate native Win32 HBITMAPs returned by Windows APIs to a format transmissible through Desktop Bridge and use them in UWP UI
 -  Windows System Assessment Tool (WinSAT) ratings are the demonstration vehicle for the sample
 
-![architecture diagram](<../docimages/WinSatUWP_currentArchitecture.PNG>)
+![architecture diagram](</docimages/WinSatUWP_currentArchitecture.PNG>)
 
-![sample screenshot](<../docimages/WinSATUWP_desktopBridge.PNG>)
+![sample screenshot](</docimages/WinSATUWP_desktopBridge.PNG>)
