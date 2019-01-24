@@ -1,0 +1,91 @@
+﻿<Page
+    x:Class="WinSatUWP.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:WinSatUWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    
+    <Page.Resources>
+
+        <!-- This LinearGradient is used as the background of the WEIGrid -->
+        <Style x:Key="DataGridBackgroundGradientStyle" TargetType="controls:DataGrid">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,.5">
+                        <GradientStop Color="#e3e6eb" Offset="0" />
+                        <GradientStop Color="#ffffff" Offset=".9" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- This IValueConverter converts a WinSat score float into a formatted string for display.  -->
+        <local:WinSatScoreConverter x:Key="WinSatScoreConverter" />
+        <local:AssessmentTimeConverter x:Key="TimeConverter" />
+
+    </Page.Resources>
+
+    <Grid>
+        <StackPanel Orientation="Vertical"  HorizontalAlignment="Center" VerticalAlignment="top" Margin="0,40,0,0">
+            <TextBlock HorizontalAlignment="Left" x:Uid="RatePerformanceTitle" Margin="0,0,0,20" FontSize="24" Foreground="Blue"/>
+            <TextBlock HorizontalAlignment="Left" x:Uid="WEIDesc" Foreground="Black" Margin="0,0,0,0"/>
+
+            <StackPanel x:Name="WEIPanel" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                    <!-- This DataGrid displays the individual WEI categories and scores reported by WinSAT. -->
+                    <controls:DataGrid x:Name="WEIGrid" Margin="0,2,0,0" AutoGenerateColumns="False" FontSize="12" SelectionMode="Extended" IsReadOnly="True" ItemsSource="{x:Bind Assessments}" Style="{StaticResource DataGridBackgroundGradientStyle}">
+                        <controls:DataGrid.Columns>
+                            <!-- The x:Uid is the control identifier for localization. The actual text for the control is in Resources.resw for each culture, under Strings folder -->
+                            <controls:DataGridTextColumn x:Uid="Component" Width="SizeToCells" FontSize="12" FontWeight="Bold" Binding="{Binding Title}" />
+                            <controls:DataGridTextColumn x:Uid="WhatIsRated" Width="SizeToCells" FontSize="12" Binding="{Binding Description}" />
+                            <controls:DataGridTextColumn x:Uid="Subscore" Width="SizeToHeader" FontSize="12" Binding="{Binding Score, Converter={StaticResource WinSatScoreConverter}}">
+                                <controls:DataGridTextColumn.CellStyle>
+                                    <Style TargetType="controls:DataGridCell">
+                                        <Style.Setters>
+                                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                                        </Style.Setters>
+                                    </Style>
+                                </controls:DataGridTextColumn.CellStyle>
+                            </controls:DataGridTextColumn>
+                        </controls:DataGrid.Columns>
+                    </controls:DataGrid>
+
+                    <!-- This displays the WEI graphic and labels, next to the grid of individual scores. -->
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock x:Name="BaseScore"  x:Uid="BaseScore" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,30,0,0" FontWeight="Bold"/>
+
+                        <!-- The image Source is set in code in the Connection_RequestReceived method when image received from the Win32 app.  -->
+                        <Image x:Name="RatingImage" Margin="20,5,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+                        <TextBlock x:Name="DeterminedBy" x:Uid="DeterminedBy" FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20,5,0,0"/>
+                    </StackPanel>
+
+                </StackPanel>
+                <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,20,0,0" >
+                        <TextBlock x:Uid="LastUpdate" Margin="0,0,10,10" FontSize="12" />
+                        <TextBlock Text="{x:Bind AssessmentTime, Mode=OneWay, Converter={StaticResource TimeConverter}}" FontSize="12"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,20,0,0" >
+                        <!-- Glyph is DefenderBadge12 from Segoe MDL2 Assets  -->
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF0FB;" VerticalAlignment="Center" Margin="0,0,0,7" />
+                        <HyperlinkButton x:Uid="ReRunAssessment" Margin="0,0,10,10" FontSize="12" Click="HyperlinkButton_Click" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+
+            <StackPanel x:Name="ProgressBox" Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock x:Uid="GetAssessmentMessage" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,20" FontWeight="Bold"/>
+                <ProgressRing x:Name="winSatProgressRing" IsActive="True" Width="300" Visibility="Visible" />
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</Page>
