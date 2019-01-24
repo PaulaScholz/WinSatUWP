@@ -11,4 +11,4 @@ This mixed UWP and Win32 sample shows how to:
 
 ![architecture diagram](</docimages/WinSatUWP_currentArchitecture.PNG>)
 
-![sample screenshot](</docimages/WinSATUWP_desktopBridge.PNG>)
+![sample screenshot](</docimages/WinSatUWP_desktopBridge.PNG>)
