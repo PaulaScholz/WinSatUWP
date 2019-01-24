@@ -1,6 +1,6 @@
 # Desktop Bridge COM Client Self-Elevation Sample
 
-##Developer Incubation and Learning (DIaL)
+## Developer Incubation and Learning (DIaL)
 
 This mixed UWP and Win32 sample shows how to:
 
