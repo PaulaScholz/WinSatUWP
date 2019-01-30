@@ -30,14 +30,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Configuration">
-    <PostBuildEvent>xcopy /y /s "C:\dev\WinSatUWP\WinSatUWP\WinSatInfo\obj\Debug\Interop.WINSATLib.dll" "C:\dev\WinSatUWP\WinSatUWP\WinSatPackage\bin\x64\Debug\AppX\WinSatInfo\"
-xcopy /y /s "C:\dev\WinSatUWP\WinSatUWP\WinSatInfo\obj\Debug\Interop.WINSATLib.dll" "C:\dev\WinSatUWP\WinSatUWP\WinSatPackage\bin\x86\Debug\AppX\WinSatInfo\"
-xcopy /y /s "C:\dev\WinSatUWP\WinSatUWP\WinSatInfo\obj\Debug\Interop.WINSATLib.dll" "C:\dev\WinSatUWP\WinSatUWP\WinSatPackage\bin\x64\Debug\AppX\WinSatRunAssessment\"
-xcopy /y /s "C:\dev\WinSatUWP\WinSatUWP\WinSatInfo\obj\Debug\Interop.WINSATLib.dll" "C:\dev\WinSatUWP\WinSatUWP\WinSatPackage\bin\x86\Debug\AppX\WinSatRunAssessment\"
-xcopy /y /s "C:\dev\WinSatUWP\WinSatUWP\WinSatInfo\obj\Release\Interop.WINSATLib.dll" "C:\dev\WinSatUWP\WinSatUWP\WinSatPackage\bin\x64\Release\AppX\WinSatInfo\"
-xcopy /y /s "C:\dev\WinSatUWP\WinSatUWP\WinSatInfo\obj\Release\Interop.WINSATLib.dll" "C:\dev\WinSatUWP\WinSatUWP\WinSatPackage\bin\x86\Release\AppX\WinSatInfo\"
-xcopy /y /s "C:\dev\WinSatUWP\WinSatUWP\WinSatInfo\obj\Release\Interop.WINSATLib.dll" "C:\dev\WinSatUWP\WinSatUWP\WinSatPackage\bin\x64\Release\AppX\WinSatRunAssessment\"
-xcopy /y /s "C:\dev\WinSatUWP\WinSatUWP\WinSatInfo\obj\Release\Interop.WINSATLib.dll" "C:\dev\WinSatUWP\WinSatUWP\WinSatPackage\bin\x86\Release\AppX\WinSatRunAssessment\"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <WapProjPath Condition="'$(WapProjPath)'==''">$(MSBuildExtensionsPath)\Microsoft\DesktopBridge\</WapProjPath>
@@ -52,7 +46,7 @@ xcopy /y /s "C:\dev\WinSatUWP\WinSatUWP\WinSatInfo\obj\Release\Interop.WINSATLib
     <EntryPointProjectUniqueName>..\WinSatUWP\WinSatUWP.csproj</EntryPointProjectUniqueName>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <AppxBundlePlatforms>x86</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
     <AppInstallerUpdateFrequency>1</AppInstallerUpdateFrequency>
     <AppInstallerCheckForUpdateFrequency>OnApplicationRun</AppInstallerCheckForUpdateFrequency>
   </PropertyGroup>
