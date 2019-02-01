@@ -125,6 +125,10 @@
     <value>Component</value>
     <comment>Header of the component column</comment>
   </data>
+  <data name="DefaultWinSatErrorMessage" xml:space="preserve">
+    <value>Message Unavailable</value>
+    <comment>Default Error Message</comment>
+  </data>
   <data name="DeterminedBy.Text" xml:space="preserve">
     <value>Determined by lowest subscore</value>
     <comment>Footer of Base Score graphic</comment>
@@ -164,5 +168,9 @@
   <data name="WhatIsRated.Header" xml:space="preserve">
     <value>What is rated</value>
     <comment>Header of the what is rated column</comment>
+  </data>
+  <data name="WinSatErrorTitle.Text" xml:space="preserve">
+    <value>WinSAT returned a non-assessment result:</value>
+    <comment>Header of error return panel</comment>
   </data>
 </root>

@@ -66,6 +66,16 @@ namespace WinSatUWP
             set { Set(ref _ratingState, value); }
         }
 
+        private string _winSatErrorMessage;
+        /// <summary>
+        /// The text value of the WinSat error enum returned by WinSatInfo
+        /// </summary>
+        public string WinSatErrorMessage
+        {
+            get { return _winSatErrorMessage; }
+            set { Set(ref _winSatErrorMessage, value); }
+        }
+
         static bool bAssessmentAlreadyMade = false;
 
         public MainPage()
@@ -147,36 +157,65 @@ namespace WinSatUWP
             {
                 case "assessmentResults":
                     {
-                        // This List was sent as JSON serialized string by the Win32 app
-                        List<WinSATAssessmentInfo> receivedAssessments = JsonConvert.DeserializeObject<List<WinSATAssessmentInfo>>((string)args.Request.Message["assessments"]);
+                        string assessmentState = (string)args.Request.Message["assessmentState"];
 
-                        float baseScore = (float)args.Request.Message["basescore"];
-
-                        // Update UI-bound collections and controls on the UI thread
-                        await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                        () =>
+                        if("valid" == assessmentState)
                         {
-                            // clear the UI-bound collection
-                            Assessments.Clear();
+                            // This List was sent as JSON serialized string by the Win32 app
+                            List<WinSATAssessmentInfo> receivedAssessments = JsonConvert.DeserializeObject<List<WinSATAssessmentInfo>>((string)args.Request.Message["assessments"]);
+
+                            float baseScore = (float)args.Request.Message["basescore"];
+
+                            // Update UI-bound collections and controls on the UI thread
+                            await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                            () =>
+                            {
+                                // clear the UI-bound collection
+                                Assessments.Clear();
+
+                                // adjust the UI
+                                WEIPanel.Visibility = Visibility.Visible;
+                                winSatProgressRing.IsActive = false;
+                                ProgressBox.Visibility = Visibility.Collapsed;
+                                WinSatInvalidPanel.Visibility = Visibility.Collapsed;
+
+                                foreach (WinSATAssessmentInfo info in receivedAssessments)
+                                {
+                                    // add the received assessments to the UI bound collection
+                                    Assessments.Add(info);
+                                }
+
+                                // populate public UI-bound properties
+                                RatingState = (string)args.Request.Message["ratingState"];
+                                AssessmentTime = DateTime.Parse((string)args.Request.Message["assessmentTime"]);
+
+                                // select the lowest subscore in the datagrid
+                                WEIGrid.SelectedIndex = FindLowestSubscoreIndex();
+                            });
+                        }
+                        else
+                        {
+                            // we received an 'invalid' WinSat assessment result, inform user
 
                             // adjust the UI
-                            WEIPanel.Visibility = Visibility.Visible;
+                            WEIPanel.Visibility = Visibility.Collapsed;
                             winSatProgressRing.IsActive = false;
                             ProgressBox.Visibility = Visibility.Collapsed;
+                            WinSatInvalidPanel.Visibility = Visibility.Visible;
 
-                            foreach (WinSATAssessmentInfo info in receivedAssessments)
+                            string winSatErrorMsg = (string)args.Request.Message["winsatAssessmentState"];
+
+                            if(winSatErrorMsg.Length > 0)
                             {
-                                // add the received assessments to the UI bound collection
-                                Assessments.Add(info);
+                                WinSatErrorMessage = winSatErrorMsg;
                             }
-
-                            // populate public UI-bound properties
-                            RatingState = (string)args.Request.Message["ratingState"];
-                            AssessmentTime = DateTime.Parse((string)args.Request.Message["assessmentTime"]);
-
-                            // select the lowest subscore in the datagrid
-                            WEIGrid.SelectedIndex = FindLowestSubscoreIndex();
-                        });
+                            else
+                            {
+                                // this is how you load strings from Resources for use in UI code-behind
+                                ResourceLoader loader = ResourceLoader.GetForCurrentView();
+                                WinSatErrorMessage = loader.GetString("DefaultWinSatErrorMessage");
+                            }
+                        }
 
                         break;
                     }

@@ -134,6 +134,13 @@ namespace WinSatInfo
             //
             CQueryWinSATClass q = new CQueryWinSATClass();
 
+            // make a ValueSet object and send the results to the UWP program
+            ValueSet valueSet = new ValueSet();
+
+            // we switch on the value of the verb in the UWP app that receives this valueSet
+            valueSet.Add("verb", "assessmentResults");
+            valueSet.Add("winsatAssessmentState", q.Info.AssessmentState.ToString());
+
             // Check for valid WinSAT state.
             if (q.Info.AssessmentState == WINSAT_ASSESSMENT_STATE.WINSAT_ASSESSMENT_STATE_VALID
                 || q.Info.AssessmentState == WINSAT_ASSESSMENT_STATE.WINSAT_ASSESSMENT_STATE_INCOHERENT_WITH_HARDWARE)
@@ -154,11 +161,7 @@ namespace WinSatInfo
                 string ratingState = q.Info.RatingStateDesc;
                 DateTime assessmentTime = (DateTime)q.Info.AssessmentDateTime;
 
-                // make a ValueSet object and send the results to the UWP program
-                ValueSet valueSet = new ValueSet();
-
-                // we switch on the value of the verb in the UWP app that receives this valueSet
-                valueSet.Add("verb", "assessmentResults");
+                valueSet.Add("assessmentState", "valid");
 
                 // add the assessment data
                 valueSet.Add("assessmentCount", Assessments.Count);
@@ -175,26 +178,32 @@ namespace WinSatInfo
                 valueSet.Add("assessmentTime", assessmentTime.ToLongDateString() + "  " + DateTime.Now.ToLongTimeString());
 
                 // we can only send value types in ValueSet, so stringify our assessment list into JSON
-                valueSet.Add("assessments", JsonConvert.SerializeObject(Assessments));
+                valueSet.Add("assessments", JsonConvert.SerializeObject(Assessments));               
+            }
+            else
+            {
 
-                AppServiceResponse response = null;
+                // we switch on the value of the verb in the UWP app that receives this valueSet
+                valueSet.Add("assessmentState", "invalid");
+            }
 
-                // put this on the thread pool inside this non-async function
-                Task.Run(async () =>
-                {
-                    response = await connection.SendMessageAsync(valueSet);
+            AppServiceResponse response = null;
 
-                }).GetAwaiter().GetResult();
+            // put this on the thread pool inside this non-async function
+            Task.Run(async () =>
+            {
+                response = await connection.SendMessageAsync(valueSet);
 
-                // we don't need to do anything here, but this is the pattern if you need it
-                if (response?.Status == AppServiceResponseStatus.Success)
-                {
-                    //string responseMessage = response.Message["response"].ToString();
-                    //if (responseMessage == "success")
-                    //{
-                    //    // do whatever your scenario requires here
-                    //}                    
-                }                
+            }).GetAwaiter().GetResult();
+
+            // we don't need to do anything here, but this is the pattern if you need it
+            if (response?.Status == AppServiceResponseStatus.Success)
+            {
+                //string responseMessage = response.Message["response"].ToString();
+                //if (responseMessage == "success")
+                //{
+                //    // do whatever your scenario requires here
+                //}                    
             }
         }
 
