@@ -31,7 +31,7 @@ We recreate the important parts of the Performance applet in a UWP application (
 
 Using this architecture, we build a UWP application that looks similar to and performs the same function as the old Performance Information and Tools control panel applet.  The UWP application launches a full-trust process to query WinSAT for assessment information, queries WinSAT for a bitmap that depicts the overall assessment, and requests elevation for another Win32 process to command a new assessment.  The application is shown below:
 
-![Figure 3 Windows Experience Index User Interface](/images/Fig3_newUI.png)
+![Figure 3 Windows Experience Index User Interface](/images/Fig3_NewUI.png)
 
 *Figure 3 - Windows Experience Index User Interface (WinSatUWP.exe)*
 
