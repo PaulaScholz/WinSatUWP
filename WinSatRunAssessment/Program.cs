@@ -42,27 +42,8 @@ namespace WinSatRunAssessment
             return 0;
         }
 
-        //[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        //public delegate void WinSATCompleteDelegate(int hresult, string strDescription);
-
-        //[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-        //public delegate void WinSATUpdateDelegate(uint uCurrentTick, uint uTickTotal, string strCurrentState);
-
-
         public class UnManagedWinSatCallbacks : IWinSATInitiateEvents
         {
-
-            //public WinSATCompleteDelegate WinSATComplete;
-            //public WinSATUpdateDelegate WinSATUpdate;
-
-            //public UnManagedWinSatCallbacks()
-            //{
-
-            //    WinSATComplete = new WinSATCompleteDelegate(WinSATCompleteImpl);
-            //    WinSATUpdate = new WinSATUpdateDelegate(WinSATUpdateImpl);
-
-            //}
-
             // Is called when WinSAT completes the assessment or an error occurs.
             // HRESULT CWinSATCallbacks::WinSATComplete(HRESULT hr, LPCWSTR description)
             public void WinSATComplete(int hresult, string strDescription)
@@ -79,7 +60,6 @@ namespace WinSatRunAssessment
                 m_assessmentComplete = true;
             }
 
-
             // Is called when the assessment makes progress. Indicates the percentage of the assessment
             // that is complete and the current component being assessed.
             // HRESULT CWinSATCallbacks::WinSATUpdate(UINT currentTick, UINT tickTotal, LPCWSTR currentState)
@@ -91,14 +71,6 @@ namespace WinSatRunAssessment
                     Debug.WriteLine(string.Format("*** Current assessing {0}", strCurrentState));
                 }
             }
-
-
-        }
-
-            
-
-            
-
-        
+        }      
     }
 }
